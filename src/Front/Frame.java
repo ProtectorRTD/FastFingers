@@ -3,15 +3,17 @@ import javax.swing.*;
 
 import Back.Generate;
 import Back.Parser;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashSet;
 public class Frame 
 {
     private static JFrame f;
     private JLabel label, language;
 
     private Parser parser;
+    // private Users user;
+    private Area area;
     private JTextArea words_generator, user_area;
     public Frame()
     {
@@ -48,9 +50,10 @@ public class Frame
 
     private void textArea()
     {
-        Area area = new Area();
+        area = new Area();
         words_generator = area.getArea();
         user_area = area.getAreaUser();
+        area.addListener(language.getText());
     }
 
     private void addObject()
@@ -70,14 +73,18 @@ public class Frame
                 if(language.getText().equals("Русский Язык"))
                 {
                     language.setText("English");
+                    area.addListener(language.getText());
                     new Generate(words_generator, language.getText(),parser);
+                    
                 }
                 else
                 {
                     language.setText("Русский Язык");
+                    area.addListener(language.getText());
                     new Generate(words_generator, language.getText(),parser);                    
                 }
             } 
         });
+        // area.addListener(language.getText());
     }
 }
