@@ -1,7 +1,12 @@
 package Back;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashSet;
 
 public class Parser 
@@ -15,16 +20,14 @@ public class Parser
         list_words_ru = readAllBytesJava7(filePath);
         filePath = "src/resources/english.txt";
         list_words_eng = readAllBytesJava7(filePath);
-        System.out.println("");//dla debuga
+        
     }
     private static HashSet<String> readAllBytesJava7(String filePath) 
     {
         HashSet <String> result = new HashSet<>();
-        String fileName=filePath;
-        try
+        try (FileReader fr = new FileReader(filePath, StandardCharsets.UTF_8);
+        BufferedReader bufferReader = new BufferedReader(fr))
         {
-           FileReader inputFile = new FileReader(fileName);
-           BufferedReader bufferReader = new BufferedReader(inputFile);
            String line;
            line = bufferReader.readLine();
            while ((line = bufferReader.readLine()) != null)

@@ -5,11 +5,13 @@ import Back.Generate;
 import Back.Parser;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashSet;
 public class Frame 
 {
     private static JFrame f;
     private JLabel label, language;
 
+    private Parser parser;
     private JTextArea words_generator, user_area;
     public Frame()
     {
@@ -17,12 +19,12 @@ public class Frame
         textArea();
         settingsFrame();
         
-        new Parser();
+        parser = new Parser();
 
         addObject();
         addListener();
         
-        new Generate(words_generator,language.getText());
+        new Generate(words_generator,language.getText(), parser);
 
         f.setVisible(true);
     }    
@@ -68,12 +70,12 @@ public class Frame
                 if(language.getText().equals("Русский Язык"))
                 {
                     language.setText("English");
-                    new Generate(words_generator, language.getText());
+                    new Generate(words_generator, language.getText(),parser);
                 }
                 else
                 {
                     language.setText("Русский Язык");
-                    new Generate(words_generator, language.getText());                    
+                    new Generate(words_generator, language.getText(),parser);                    
                 }
             } 
         });

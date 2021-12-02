@@ -7,7 +7,7 @@ public class Label
     {
         label=new JLabel("Insert text here");
         label.setBounds(50,280,400,20);
-        language = new JLabel("Русский Язык");
+        language = new JLabel("English");
         language.setBounds(250,20, 400,20);
     }   
     public JLabel  getLabel1()
