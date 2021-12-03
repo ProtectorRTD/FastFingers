@@ -1,6 +1,9 @@
 package Back;
 import java.awt.event.*;
+import java.lang.module.FindException;
+
 import javax.swing.JTextArea;
+import javax.swing.text.BadLocationException;
 public class ListenerArea 
 {
     private String rus;
@@ -9,12 +12,13 @@ public class ListenerArea
     private FinderWord finderWord;
     private String user_word;
     private JTextArea area;
-    public ListenerArea(JTextArea user_area, JTextArea wordsArea)
+    public ListenerArea(JTextArea user_area, JTextArea wordsArea, FinderWord finderWord)
     {
         this.area = wordsArea;
         this.user_area = user_area;
         user_word = "";
-        Russian();
+        this.finderWord = finderWord;
+        Russian();       
     } 
     public void Russian()
     {
@@ -61,8 +65,15 @@ public class ListenerArea
                 } 
                 if(e.getKeyCode() == KeyEvent.VK_SPACE)
                 {
-                    finderWord = new FinderWord();
-                    finderWord.compare(area, user_word);  
+                    try 
+                    {
+                        finderWord.compare(area, user_word);
+                    } 
+                    catch (BadLocationException e1) 
+                    {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }  
                     user_area.setText("");
                     user_word = "";
                 }      

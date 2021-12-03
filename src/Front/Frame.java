@@ -1,7 +1,9 @@
 package Front;
 import javax.swing.*;
 
+import Back.FinderWord;
 import Back.Generate;
+import Back.ListenerArea;
 import Back.Parser;
 
 import java.awt.event.MouseAdapter;
@@ -14,19 +16,26 @@ public class Frame
     private Parser parser;
     // private Users user;
     private Area area;
+    private ListenerArea  listenArea;
     private JTextArea words_generator, user_area;
+    private FinderWord finderWord;
     public Frame()
     {
         allLabel();
-        textArea();
         settingsFrame();
+        textArea();
         
         parser = new Parser();
-
+        
         addObject();
         addListener();
         
+        
+        
         new Generate(words_generator,language.getText(), parser);
+        finderWord.list_word();
+        listenArea = new ListenerArea(user_area, words_generator,   finderWord);
+        listenArea.addListener(language.getText());
 
         f.setVisible(true);
     }    
@@ -50,10 +59,11 @@ public class Frame
 
     private void textArea()
     {
-        area = new Area();
+        area = new Area(); //класс!!
         words_generator = area.getArea();
         user_area = area.getAreaUser();
-        area.addListener(language.getText());
+        // area.addListener(language.getText());
+        finderWord =  new FinderWord(words_generator);
     }
 
     private void addObject()
@@ -73,14 +83,16 @@ public class Frame
                 if(language.getText().equals("Русский Язык"))
                 {
                     language.setText("English");
-                    area.addListener(language.getText());
+                    // area.addListener(language.getText());
+                    listenArea.addListener(language.getText());
                     new Generate(words_generator, language.getText(),parser);
                     
                 }
                 else
                 {
                     language.setText("Русский Язык");
-                    area.addListener(language.getText());
+                    // area.addListener(language.getText());
+                    listenArea.addListener(language.getText());
                     new Generate(words_generator, language.getText(),parser);                    
                 }
             } 
