@@ -4,16 +4,16 @@ import javax.swing.JTextArea;
 import javax.swing.text.Highlighter;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultHighlighter;
-import javax.swing.text.Highlighter;
-import javax.swing.text.Highlighter.HighlightPainter;
 import java.awt.Color;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 public class FinderWord 
 {
+
+    //заменить хайлатер на выделение букв, + сделать дебаги и возможно оптимизацию методов
     // private String words;
+    //ошибка в том, что когда в середине текста человек переключает язык, то  поинтер не изменяется
     private int count_words;
     private int pointer;
     private int index;
@@ -38,16 +38,22 @@ public class FinderWord
         word_higlight =  word_list.getText().split(" "); //нету текста
 
         list_word = convertArrayToSet(word_higlight);//set
+        pointer = 0;
+        count_words = 20; 
+        // System.out.println("System.out.println");
     }
-    public void compare(JTextArea words, String inputUsers) throws BadLocationException//выделяет цветом  после нажатия проблема, инпут юзерс передается слова
+    //что нужно онулять поинтер и индекс если другой файндворд
+    public void compare(JTextArea words, String inputUsers, FinderWord finderWord) throws BadLocationException //выделяет цветом  после нажатия проблема, инпут юзерс передается слова
     {
         //вызываю compare много раз он считывает по новой
+        
         int count_space = 0;
         int previous_space = 0;
-
-        // word_higlight = wordsArea.getText().split(" "); //нету текста  стояло тут
-
-        // list_word = convertArrayToSet(word_higlight);//set
+        if(this != finderWord)
+        {
+            pointer = 0;
+            count_words = 0;
+        }
 
         inputUsers = inputUsers.trim(); //чтобы убрать пробел
         Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
