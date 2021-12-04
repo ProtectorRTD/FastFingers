@@ -35,7 +35,7 @@ public class Frame
         new Generate(words_generator,language.getText(), parser);
         finderWord.list_word();
         listenArea = new ListenerArea(user_area, words_generator,   finderWord);
-        listenArea.addListener(language.getText());
+        listenArea.addListener(language.getText(), finderWord);
 
         f.setVisible(true);
     }    
@@ -76,25 +76,28 @@ public class Frame
 
     private void addListener()
     {
+        // FinderWord finderWord_1 = new FinderWord(words_generator); 
         language.addMouseListener(new MouseAdapter()
         {
             public void mouseClicked(MouseEvent e)  
             {  
+                ////сделать удаление(keyListener) когда lable меняет название
                 if(language.getText().equals("Русский Язык"))
                 {
                     language.setText("English");
-                    // area.addListener(language.getText());
-                    listenArea.addListener(language.getText());
                     new Generate(words_generator, language.getText(),parser);
                     
                 }
                 else
                 {
                     language.setText("Русский Язык");
-                    // area.addListener(language.getText());
-                    listenArea.addListener(language.getText());
-                    new Generate(words_generator, language.getText(),parser);                    
+                    new Generate(words_generator, language.getText(),parser);  
+                    // removeKeyListener.use  
                 }
+                finderWord = null;
+                FinderWord finderWord_1 = new FinderWord(words_generator);   
+                finderWord_1.list_word();            
+                listenArea.addListener(language.getText() , finderWord_1);
             } 
         });
         // area.addListener(language.getText());
