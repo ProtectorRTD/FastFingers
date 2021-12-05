@@ -7,7 +7,6 @@ public class Users
     }
     public boolean correct(String Word, String input)
     {
-        
         return false;
     }
 }

@@ -10,9 +10,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 public class Frame 
 {
+    //теперь надо доделать когда время заканчивается чтобы нельзя было менять текст поле, создать класс, который будет считать
+    // возможно кликабельный лабейл заменить на что-то большее, сделать бэкграунд фото
+    //увеличить размеры текста мб посмотреть про отклик клавы, может лучше будет смотреться typed а не released
     private static JFrame f;
-    private JLabel label, language;
-
+    private JLabel label, language, time;
     private Parser parser;
     // private Users user;
     private Area area;
@@ -29,12 +31,10 @@ public class Frame
         
         addObject();
         addListener();
-        
-        
-        
+              
         new Generate(words_generator,language.getText(), parser);
         finderWord.list_word();
-        listenArea = new ListenerArea(user_area, words_generator,   finderWord);
+        listenArea = new ListenerArea(user_area, words_generator,   finderWord, parser, time);
         listenArea.addListener(language.getText(), finderWord);
 
         f.setVisible(true);
@@ -54,7 +54,7 @@ public class Frame
         Label class_label = new Label();
         label = class_label.getLabel1();
         language = class_label.getLanguage();
-
+        time = class_label.getTime();
     }
 
     private void textArea()
@@ -72,6 +72,7 @@ public class Frame
         f.add(language);
         f.add(words_generator);
         f.add(user_area);
+        f.add(time);
     }
 
     private void addListener()
@@ -82,22 +83,28 @@ public class Frame
             public void mouseClicked(MouseEvent e)  
             {  
                 ////сделать удаление(keyListener) когда lable меняет название
+                String language_label = null;
                 if(language.getText().equals("Русский Язык"))
                 {
                     language.setText("English");
                     new Generate(words_generator, language.getText(),parser);
-                    
+                    language_label = "English";
+                    user_area.setText("");
                 }
                 else
                 {
                     language.setText("Русский Язык");
                     new Generate(words_generator, language.getText(),parser);  
                     // removeKeyListener.use  
+                    language_label = "Русский Язык";
+                    user_area.setText("");
                 }
                 finderWord = null;
                 FinderWord finderWord_1 = new FinderWord(words_generator);   
                 finderWord_1.list_word();            
-                listenArea.addListener(language.getText() , finderWord_1);
+                System.out.println(language_label);
+                listenArea.addListener(language_label, finderWord_1);
+                listenArea.setBooleanStartTimer();
             } 
         });
         // area.addListener(language.getText());

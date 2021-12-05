@@ -1,9 +1,11 @@
 package Back;
 import java.awt.event.*;
-import java.lang.module.FindException;
 
+import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.text.BadLocationException;
+
+import Front.Time;
 public class ListenerArea 
 {
     private String rus;
@@ -15,14 +17,26 @@ public class ListenerArea
 
     private KeyAdapter keyAdapter;
     private String language;
+
+    private int pointer;
+    private Parser parser;
+    private JLabel time;
+    private boolean first;
+
+    private Time clock;
+    private ListenerArea listenerArea;
     // private KeyAdapter keyAdapter;
-    public ListenerArea(JTextArea user_area, JTextArea wordsArea, FinderWord finderWord)
+    public ListenerArea(JTextArea user_area, JTextArea wordsArea, FinderWord finderWord, Parser parser, JLabel Time)
     {
+        listenerArea = this;
+        first = false;
         this.area = wordsArea;
         this.user_area = user_area;
         user_word = "";
         this.finderWord = finderWord;
         language = "English";
+        this.parser = parser;
+        this.time = Time;
         Russian();       
     } 
     public void Russian()
@@ -30,12 +44,20 @@ public class ListenerArea
         rus = "абвгдеёжзийклмнопрстуфхцчшщьыъэюя";
         alhabet_rus = rus.toCharArray();
     }
-
+    public void setBooleanStartTimer()
+    {
+        clock.reset();
+        first = false;
+        time.setText("1:00");
+    }
+    public boolean startTimer()
+    {
+        return first;
+    }
     private void listener()
     {
         keyAdapter = new KeyAdapter()
         {
-
             @Override
             public void keyTyped(KeyEvent e) 
             {                
@@ -44,7 +66,11 @@ public class ListenerArea
             @Override
             public void keyPressed(KeyEvent e) 
             {
-
+                if(first == false)
+                {
+                    first = true;
+                    clock = new Time(time, first, listenerArea);
+                }
             }
 
             @Override
@@ -62,7 +88,6 @@ public class ListenerArea
                         if(e.getKeyChar() == (alhabet_rus[i]))
                         {
                             user_word = user_area.getText();         
-
                         }
                     }
                 }
@@ -80,6 +105,15 @@ public class ListenerArea
                             user_word = user_area.getText();
                             finderWord.compare(area, user_word, finderWord);
                         }
+                        pointer = finderWord.getPointer();
+                        if(pointer == 20)
+                        {
+                            //генерировать
+                            new Generate(area, language, parser);
+                            //изменить поинтеры все анулировать и что самое главное новый лист
+                            finderWord.list_word();
+                            finderWord.setPointer(0);
+                        }
                     } 
                     catch (BadLocationException e1) 
                     {
@@ -93,10 +127,8 @@ public class ListenerArea
     }
     public void addListener(String language, FinderWord finderWord_1) //сделать удаление когда lable меняет название
     {
-        if(!(this.language.equals("English"))) 
-        {
-            this.language = language;
-        }
+        first = false;
+        this.language = language;
         if(this.finderWord != finderWord_1)
         {
             finderWord = finderWord_1;

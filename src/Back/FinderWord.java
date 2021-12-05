@@ -21,6 +21,7 @@ public class FinderWord
     private String[] word_higlight;
     private Set<String> list_word;
     private JTextArea word_list;
+
     public FinderWord(JTextArea wordsArea)
     {   
         pointer = 0;
@@ -44,11 +45,10 @@ public class FinderWord
     }
     //что нужно онулять поинтер и индекс если другой файндворд
     public void compare(JTextArea words, String inputUsers, FinderWord finderWord) throws BadLocationException //выделяет цветом  после нажатия проблема, инпут юзерс передается слова
-    {
-        //вызываю compare много раз он считывает по новой
-        
+    {   
         int count_space = 0;
         int previous_space = 0;
+        // int count_highlighter = 0;
         if(this != finderWord)
         {
             pointer = 0;
@@ -59,14 +59,14 @@ public class FinderWord
         Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
         index  = words.getText().indexOf(inputUsers);
         
-        //если неправильно то тоже удалять их сета придумать как
         if(list_word.contains(inputUsers))
         {
             try 
             {
                 highlightext();
                 list_word.remove(inputUsers);
-                System.out.println("Debug");
+                // count_highlighter++;
+                // System.out.println("Debug");
             } 
             catch (BadLocationException e) 
             {
@@ -90,6 +90,7 @@ public class FinderWord
                             words.getHighlighter().addHighlight(previous_space, i, painter);
                             String removing = words.getText().substring(previous_space, i);
                             list_word.remove(removing);
+                            // count_highlighter++;
                             break;
                         } catch (Exception e) 
                         {
@@ -103,6 +104,8 @@ public class FinderWord
             }
         }
         pointer++;
+        // System.out.println(pointer);
+        
     }
     public void highlightext() throws BadLocationException
     {
@@ -118,6 +121,14 @@ public class FinderWord
                 break;
             }
         }
+    }
+    public int getPointer()
+    {
+        return pointer;
+    }
+    public void setPointer(int value)
+    {
+        this.pointer = value;
     }
 
     public static <T> Set<T> convertArrayToSet(T array[])
