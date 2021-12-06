@@ -5,14 +5,15 @@ import Back.FinderWord;
 import Back.Generate;
 import Back.ListenerArea;
 import Back.Parser;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 public class Frame 
 {
+    //баг что пользователь может написать правильное слово но которое находится последним
     //теперь надо доделать когда время заканчивается чтобы нельзя было менять текст поле, создать класс, который будет считать
     // возможно кликабельный лабейл заменить на что-то большее, сделать бэкграунд фото
     //увеличить размеры текста мб посмотреть про отклик клавы, может лучше будет смотреться typed а не released
+    // выделять серым следующее слово 
     private static JFrame f;
     private JLabel label, language, time;
     private Parser parser;

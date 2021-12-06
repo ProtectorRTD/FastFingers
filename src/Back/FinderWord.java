@@ -21,7 +21,7 @@ public class FinderWord
     private String[] word_higlight;
     private Set<String> list_word;
     private JTextArea word_list;
-
+    private Object gray_color;
     public FinderWord(JTextArea wordsArea)
     {   
         pointer = 0;
@@ -46,6 +46,7 @@ public class FinderWord
     //что нужно онулять поинтер и индекс если другой файндворд
     public void compare(JTextArea words, String inputUsers, FinderWord finderWord) throws BadLocationException //выделяет цветом  после нажатия проблема, инпут юзерс передается слова
     {   
+
         int count_space = 0;
         int previous_space = 0;
         // int count_highlighter = 0;
@@ -54,16 +55,17 @@ public class FinderWord
             pointer = 0;
             count_words = 0;
         }
-
         inputUsers = inputUsers.trim(); //чтобы убрать пробел
         Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.red);
         index  = words.getText().indexOf(inputUsers);
-        
-        if(list_word.contains(inputUsers))
+       
+        //есть вторая идея сделать хэштейбл с со значением их позиции, выходит что если такое слово есть но поинтера нету то все красный
+        System.out.println(word_higlight[pointer]);
+        if(list_word.contains(inputUsers) && word_higlight[pointer].equals(inputUsers))
         {
             try 
             {
-                highlightext();
+                highlightext(); //возможно делать не через хэш сэт а просто удалять из него а так по индексу проверять
                 list_word.remove(inputUsers);
                 // count_highlighter++;
                 // System.out.println("Debug");
@@ -86,6 +88,10 @@ public class FinderWord
                     {
                         try 
                         {
+                            if(gray_color != null)  
+                            {
+                                word_list.getHighlighter().removeHighlight(gray_color);
+                            }
                             if(previous_space != 0) previous_space++; //чтобы если первое слово неправильно правильно выделил а так чтобы пробелы не выделяло
                             words.getHighlighter().addHighlight(previous_space, i, painter);
                             String removing = words.getText().substring(previous_space, i);
@@ -104,12 +110,47 @@ public class FinderWord
             }
         }
         pointer++;
+        highlighTextNext();
+        //сделать серое выделене
+
         // System.out.println(pointer);
         
     }
-    public void highlightext() throws BadLocationException
+    public void highlighTextNext() throws BadLocationException
+    {
+        int count_spaces = 0;
+        int previous = 0;
+        Highlighter.HighlightPainter gray = new DefaultHighlighter.DefaultHighlightPainter(Color.gray);
+        for(int i = 0;  i < word_list.getText().length(); i++)
+        {
+            if(word_list.getText().charAt(i) == ' ')
+            {
+                count_spaces++;
+                previous = i;
+            }
+            if(count_spaces == pointer)
+            {
+                if(previous  != 0) previous++;
+                int j = 0;
+                for(j = i+1; j < word_list.getText().length(); j++)
+                {
+                    if(word_list.getText().charAt(j) == ' ')
+                    {
+                        break;
+                    }
+                }
+                gray_color = word_list.getHighlighter().addHighlight(previous, j, gray);
+                break;
+            }
+        }
+    }
+    public void highlightext() throws BadLocationException //удаление хайлайта
     {
         Highlighter.HighlightPainter painter = new DefaultHighlighter.DefaultHighlightPainter(Color.green);
+        if(gray_color != null)  
+        {
+            word_list.getHighlighter().removeHighlight(gray_color);
+        }
         for(int i = index; i < word_list.getText().length(); i++)
         {
             if(word_list.getText().charAt(i) != ' ')
