@@ -22,6 +22,8 @@ public class FinderWord
     private Set<String> list_word;
     private JTextArea word_list;
     private Object gray_color;
+
+    
     public FinderWord(JTextArea wordsArea)
     {   
         pointer = 0;
